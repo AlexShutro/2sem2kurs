@@ -1,0 +1,39 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+    <!--Table Сolumns-->
+    <system:String x:Key="ColumnID">ID</system:String>
+    <system:String x:Key="ColumnImagePreview">Image preview</system:String>
+    <system:String x:Key="ColumnTitle">Title</system:String>
+    <system:String x:Key="ColumnCategory">Category</system:String>
+    <system:String x:Key="ColumnRating">Rating</system:String>
+    <system:String x:Key="ColumnPrice">Price</system:String>
+    <system:String x:Key="ColumnQuantity">Quantity</system:String>
+    <system:String x:Key="ColumnShortDescription">Short description</system:String>
+    <system:String x:Key="ColumnLongDescription">Long description</system:String>
+    <system:String x:Key="ColumnImagePath">Image path</system:String>
+
+    <!--Main Window-->
+    <system:String x:Key="MainWindowTitle">Phone Shop</system:String>
+    <system:String x:Key="MainWindowAddProduct">Add product</system:String>
+    <system:String x:Key="MainWindowEditProducts">Edit products</system:String>
+    <system:String x:Key="MainWindowShowProducts">Show products</system:String>
+    <system:String x:Key="MainWindowProductsCount">Products count</system:String>
+
+    <!--Add Product Window-->
+    <system:String x:Key="AddProductWindowTitle">Add product</system:String>
+    <system:String x:Key="AddProductWindowClear">Clear</system:String>
+    <system:String x:Key="AddProductWindowAdd">Add</system:String>
+
+    <!--Edit Products Window-->
+    <system:String x:Key="EditProductsWindowTitle">Edit products</system:String>
+
+    <!--Show Products Window-->
+    <system:String x:Key="ShowProductsWindowTitle">Show products</system:String>
+    <system:String x:Key="ShowProductsWindowSorting">Sorting</system:String>
+    <system:String x:Key="ShowProductsWindowFiltering">Filtering</system:String>
+    <system:String x:Key="ShowProductsWindowFilteringFrom">from</system:String>
+    <system:String x:Key="ShowProductsWindowFilteringTo">to</system:String>
+    <system:String x:Key="ShowProductsWindowFilter">Filter</system:String>
+    <system:String x:Key="ShowProductsWindowReset">Reset</system:String>
+</ResourceDictionary>

@@ -1,0 +1,125 @@
+﻿<Window x:Name="window" x:Class="WpfShop.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfShop"
+        xmlns:System="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d"
+        Title="{DynamicResource MainWindowTitle}" Height="500" Width="1000" Icon="/icon.png" WindowStartupLocation="CenterScreen" MinWidth="1000">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Localizations\EN.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <Style x:Key="MenuButtonStyle" TargetType="Button">
+                <Setter Property="Background" Value="LightGreen"/>
+                <Setter Property="Foreground" Value="DarkGreen"/>
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="FontWeight" Value="Bold"/>
+                <Setter Property="BorderThickness" Value="3"/>
+                <Setter Property="BorderBrush" Value="DarkGreen"/>
+            </Style>
+            <ObjectDataProvider x:Key="ProductCategory" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type Type="local:ProductCategory"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Grid.Background>
+            <ImageBrush ImageSource="{DynamicResource WallpapersSrc}" />
+        </Grid.Background>
+        <Button x:Name="AddProductButton" Content="{DynamicResource MainWindowAddProduct}" Style="{StaticResource MenuButtonStyle}" HorizontalAlignment="Left" VerticalAlignment="Top" Height="80" Width="200" Margin="10,10,0,0" Click="AddProductButton_Click"/>
+        <Button x:Name="EditProductsButton" Content="{DynamicResource MainWindowEditProducts}" Style="{StaticResource MenuButtonStyle}" HorizontalAlignment="Left" VerticalAlignment="Top" Height="80" Width="200" Click="EditProductsButton_Click" Margin="300,10,0,0"/>
+        <Button x:Name="ShowProductsButton" Content="{DynamicResource MainWindowShowProducts}" Style="{StaticResource MenuButtonStyle}" HorizontalAlignment="Left" VerticalAlignment="Top" Height="80" Width="200" Margin="600,10,0,0" Click="ShowProductsButton_Click"/>
+        <Button x:Name="LocalizationRUButton" HorizontalAlignment="Right" Margin="0,10,55,0" VerticalAlignment="Top" Width="40" Height="40" Click="LocalizationRUButton_Click" Background="{x:Null}" BorderBrush="{x:Null}">
+            <Image Source="/Windows/russianLanguage.png" />
+        </Button>
+        <Button x:Name="LocalizationENButton" HorizontalAlignment="Right" VerticalAlignment="Top" Width="40" Height="40" Margin="0,10,10,0" Click="LocalizationENButton_Click" Background="{x:Null}" BorderBrush="{x:Null}">
+            <Image Source="/Windows/englishLanguage.png" />
+        </Button>
+        <Label HorizontalAlignment="Left" Margin="10,100,0,0" VerticalAlignment="Top" Foreground="OrangeRed" FontSize="16" FontWeight="Bold">
+            <Label.Content>
+                <TextBlock>
+                    <Run Text="{DynamicResource MainWindowProductsCount}" />
+                    <Run Text=": " />
+                    <Run x:Name="ProductsCountLabel" />
+                </TextBlock>
+            </Label.Content>
+        </Label>
+        <DataGrid x:Name="ProductsDataGrid" d:ItemsSource="{d:SampleData ItemCount=3}" ColumnWidth="*" AutoGenerateColumns="False" CanUserAddRows="False" Background="{x:Null}" Margin="-1,136,201,10" CanUserDeleteRows="False" IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding ID}" IsReadOnly="True">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="Content" Value="{DynamicResource ColumnID}" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridTemplateColumn IsReadOnly="True">
+                    <DataGridTemplateColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="Content" Value="{DynamicResource ColumnImagePreview}" />
+                        </Style>
+                    </DataGridTemplateColumn.HeaderStyle>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Image Source="{Binding ImagePath}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Binding="{Binding Title}">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="Content" Value="{DynamicResource ColumnTitle}" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridComboBoxColumn SelectedItemBinding="{Binding Category}" ItemsSource="{Binding Source={StaticResource ProductCategory}}">
+                    <DataGridComboBoxColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="Content" Value="{DynamicResource ColumnCategory}" />
+                        </Style>
+                    </DataGridComboBoxColumn.HeaderStyle>
+                </DataGridComboBoxColumn>
+                <DataGridTextColumn Binding="{Binding Rating, ValidatesOnDataErrors=True}">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="Content" Value="{DynamicResource ColumnRating}" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding Price}">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="Content" Value="{DynamicResource ColumnPrice}" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding Quantity}">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="Content" Value="{DynamicResource ColumnQuantity}" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding ShortDescription}">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="Content" Value="{DynamicResource ColumnShortDescription}" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding LongDescription}">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="Content" Value="{DynamicResource ColumnLongDescription}" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>

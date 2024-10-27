@@ -1,0 +1,127 @@
+﻿<Window x:Class="WpfShop.ShowProductsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfShop"
+        xmlns:System="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d"
+        Title="{DynamicResource ShowProductsWindowTitle}" Height="450" Width="800" WindowStartupLocation="CenterScreen" Icon="/icon.png">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Localizations\EN.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="Label">
+                <Setter Property="Foreground" Value="LightGray" />
+                <Setter Property="FontWeight" Value="Bold" />
+                <Setter Property="Background" Value="Black" />
+            </Style>
+            <ObjectDataProvider x:Key="ProductCategory" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type Type="local:ProductCategory"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Grid.Background>
+            <ImageBrush ImageSource="{DynamicResource WallpapersSrc}" />
+        </Grid.Background>
+        <DataGrid x:Name="ProductsDataGrid" d:ItemsSource="{d:SampleData ItemCount=3}" ColumnWidth="*" AutoGenerateColumns="False" CanUserAddRows="False" Background="{x:Null}" Margin="200,0,10,10" CanUserDeleteRows="False" IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding ID}" IsReadOnly="True">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="Content" Value="{DynamicResource ColumnID}" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridTemplateColumn IsReadOnly="True">
+                    <DataGridTemplateColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="Content" Value="{DynamicResource ColumnImagePreview}" />
+                        </Style>
+                    </DataGridTemplateColumn.HeaderStyle>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Image Source="{Binding ImagePath}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Binding="{Binding Title}">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="Content" Value="{DynamicResource ColumnTitle}" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridComboBoxColumn SelectedItemBinding="{Binding Category}" ItemsSource="{Binding Source={StaticResource ProductCategory}}">
+                    <DataGridComboBoxColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="Content" Value="{DynamicResource ColumnCategory}" />
+                        </Style>
+                    </DataGridComboBoxColumn.HeaderStyle>
+                </DataGridComboBoxColumn>
+                <DataGridTextColumn Binding="{Binding Rating, ValidatesOnDataErrors=True}">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="Content" Value="{DynamicResource ColumnRating}" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding Price}">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="Content" Value="{DynamicResource ColumnPrice}" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding Quantity}">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="Content" Value="{DynamicResource ColumnQuantity}" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding ShortDescription}">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="Content" Value="{DynamicResource ColumnShortDescription}" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding LongDescription}">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="Content" Value="{DynamicResource ColumnLongDescription}" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Label Content="{DynamicResource ShowProductsWindowSorting}" HorizontalAlignment="Left" Margin="10,48,0,0" VerticalAlignment="Top" Width="185" FontSize="16"/>
+        <Label Content="{DynamicResource ColumnID}" HorizontalAlignment="Left" Margin="10,84,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="SortingIDDescButton" Content="▼" HorizontalAlignment="Left" Margin="175,87,0,0" VerticalAlignment="Top" Width="20" Height="20" Background="Snow" Click="SortingIDDescButton_Click"/>
+        <Button x:Name="SortingIDAscButton" Content="▲" HorizontalAlignment="Left" Margin="150,87,0,0" VerticalAlignment="Top" Width="20" Height="20" Background="White" Click="SortingIDAscButton_Click"/>
+        <Label Content="{DynamicResource ColumnRating}" HorizontalAlignment="Left" Margin="10,114,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="SortingRatingDescButton" Content="▼" HorizontalAlignment="Left" Margin="175,117,0,0" VerticalAlignment="Top" Width="20" Height="20" Background="Snow" Click="SortingRatingDescButton_Click"/>
+        <Button x:Name="SortingRatingAscButton" Content="▲" HorizontalAlignment="Left" Margin="150,117,0,0" VerticalAlignment="Top" Width="20" Height="20" Background="White" Click="SortingRatingAscButton_Click"/>
+        <Label Content="{DynamicResource ColumnPrice}" HorizontalAlignment="Left" Margin="10,144,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="SortingPriceDescButton" Content="▼" HorizontalAlignment="Left" Margin="175,147,0,0" VerticalAlignment="Top" Width="20" Height="20" Background="Snow" Click="SortingPriceDescButton_Click"/>
+        <Button x:Name="SortingPriceAscButton" Content="▲" HorizontalAlignment="Left" Margin="150,147,0,0" VerticalAlignment="Top" Width="20" Height="20" Background="White" Click="SortingPriceAscButton_Click"/>
+        <Label Content="{DynamicResource ColumnQuantity}" HorizontalAlignment="Left" Margin="10,174,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="SortingQuantityDescButton" Content="▼" HorizontalAlignment="Left" Margin="175,177,0,0" VerticalAlignment="Top" Width="20" Height="20" Background="Snow" Click="SortingQuantityDescButton_Click"/>
+        <Button x:Name="SortingQuantityAscButton" Content="▲" HorizontalAlignment="Left" Margin="150,177,0,0" VerticalAlignment="Top" Width="20" Height="20" Background="White" Click="SortingQuantityAscButton_Click"/>
+        <Button x:Name="ResetButton" Content="{DynamicResource ShowProductsWindowReset}" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="185" Height="30" Background="Red" Foreground="White" FontSize="16" FontWeight="Bold" Click="ResetButton_Click"/>
+        <Image HorizontalAlignment="Left" Height="30" Margin="10,10,0,0" VerticalAlignment="Top" Width="30" Source="/Windows/search.png"/>
+        <TextBox x:Name="SearchTextBox" HorizontalAlignment="Left" Margin="45,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="150" Height="30" FontSize="18" TextChanged="SearchTextBox_TextChanged"/>
+        <Label Content="{DynamicResource ShowProductsWindowFiltering}" HorizontalAlignment="Left" Margin="10,212,0,0" VerticalAlignment="Top" Width="185" FontSize="16"/>
+        <Label Content="{DynamicResource ColumnPrice}" HorizontalAlignment="Left" Margin="10,261,0,0" VerticalAlignment="Top"/>
+        <Label Content="{DynamicResource ShowProductsWindowFilteringFrom}" HorizontalAlignment="Left" Margin="53,248,0,0" VerticalAlignment="Top" Width="40"/>
+        <Label Content="{DynamicResource ShowProductsWindowFilteringTo}" HorizontalAlignment="Left" Margin="53,279,0,0" VerticalAlignment="Top" Width="40"/>
+        <TextBox x:Name="FilteringPriceFromTextBox" HorizontalAlignment="Left" Margin="98,252,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="97" PreviewTextInput="OnlyDecimal_PreviewTextInput"/>
+        <TextBox x:Name="FilteringPriceToTextBox" HorizontalAlignment="Left" Margin="98,283,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="97" PreviewTextInput="OnlyDecimal_PreviewTextInput"/>
+        <Button x:Name="FilterButton" Content="{DynamicResource ShowProductsWindowFilter}" HorizontalAlignment="Left" Margin="10,310,0,0" VerticalAlignment="Top" Width="185" Height="30" Background="Green" Foreground="White" FontSize="16" FontWeight="Bold" Click="FilterButton_Click"/>
+    </Grid>
+</Window>

@@ -1,0 +1,39 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+    <!--Table Columns-->
+    <system:String x:Key="ColumnID">Номер</system:String>
+    <system:String x:Key="ColumnImagePreview">Предпросмотр изображения</system:String>
+    <system:String x:Key="ColumnTitle">Заголовок</system:String>
+    <system:String x:Key="ColumnCategory">Категория</system:String>
+    <system:String x:Key="ColumnRating">Рейтинг</system:String>
+    <system:String x:Key="ColumnPrice">Цена</system:String>
+    <system:String x:Key="ColumnQuantity">Количество</system:String>
+    <system:String x:Key="ColumnShortDescription">Краткое описание</system:String>
+    <system:String x:Key="ColumnLongDescription">Полное описание</system:String>
+    <system:String x:Key="ColumnImagePath">Путь к изображению</system:String>
+
+    <!--Main Window-->
+    <system:String x:Key="MainWindowTitle">Магазин телефонов</system:String>
+    <system:String x:Key="MainWindowAddProduct">Добавить товар</system:String>
+    <system:String x:Key="MainWindowEditProducts">Редактировать товары</system:String>
+    <system:String x:Key="MainWindowShowProducts">Показать товары</system:String>
+    <system:String x:Key="MainWindowProductsCount">Количество товаров</system:String>
+    
+    <!--Add Product Window-->
+    <system:String x:Key="AddProductWindowTitle">Добавление товара</system:String>
+    <system:String x:Key="AddProductWindowClear">Очистить</system:String>
+    <system:String x:Key="AddProductWindowAdd">Добавить</system:String>
+
+    <!--Edit Products Window-->
+    <system:String x:Key="EditProductsWindowTitle">Редактирование товаров</system:String>
+
+    <!--Show Products Window-->
+    <system:String x:Key="ShowProductsWindowTitle">Просмотр товаров</system:String>
+    <system:String x:Key="ShowProductsWindowSorting">Сортировка</system:String>
+    <system:String x:Key="ShowProductsWindowFiltering">Фильтрация</system:String>
+    <system:String x:Key="ShowProductsWindowFilteringFrom">от</system:String>
+    <system:String x:Key="ShowProductsWindowFilteringTo">до</system:String>
+    <system:String x:Key="ShowProductsWindowFilter">Отфильтровать</system:String>
+    <system:String x:Key="ShowProductsWindowReset">Сбросить</system:String>
+</ResourceDictionary>
