@@ -1,0 +1,90 @@
+create tablespace ts_sharp_1
+datafile 'SHARP_1.dbf'
+size 20m
+reuse autoextend on next 2M
+online
+extent management local;
+
+create tablespace ts_sharp_2
+datafile 'SHARP_2.dbf'
+size 20m
+reuse autoextend on next 2M
+online
+extent management local;
+
+create tablespace ts_sharp_3
+datafile 'SHARP_3.dbf'
+size 20m
+reuse autoextend on next 2M
+online
+extent management local;
+
+create tablespace ts_sharp_4
+datafile 'SHARP_4.dbf'
+size 20m
+reuse autoextend on next 2M
+online
+extent management local;
+--1
+create table t_range1
+(
+  str nvarchar2(20) primary key,
+  num int
+)
+
+partition by range (num)
+(
+  partition nums_less_10 values less than (10) tablespace TS_SHARP_1,
+  partition nums_less_20 values less than (20) tablespace TS_SHARP_2,
+  partition nums_less_30 values less than (30) tablespace TS_SHARP_3,
+  partition nums_max values less than (maxvalue) tablespace TS_SHARP_4
+);
+--2
+create table T_INTERVAL(id number, time_id date)
+    partition by range(time_id)
+    interval (numtoyminterval(1,'month'))
+    (
+      partition p0 values less than(to_date ('1-12-2009', 'dd-mm-yyyy'))
+      partition p1 values less than(to_date ('1-12-2015', 'dd-mm-yyyy'))
+      partition p2 values less than(to_date ('1-12-2018', 'dd-mm-yyyy'))
+    );
+--3
+create table t_hash
+(
+  id int generated always as identity primary key,
+  str nvarchar2(30)
+)
+partition by hash (str)
+(
+  partition part_1 tablespace ts_sharp_1,
+  partition part_2 tablespace ts_sharp_2,
+  partition part_3 tablespace ts_sharp_3,
+  partition part_4 tablespace ts_sharp_4,
+);
+--4
+create table t_list
+(
+  id int generated always as identity primary key,
+  str nchar(30)
+)
+partition by list (str)
+(
+  partition part_1 values ('aaa', 'bbb', 'ccc', 'fff') tablespace TS_SHARP_1,
+  partition part_2 values ('ggg', 'hhh', 'iii', 'lll') tablespace TS_SHARP_2,
+  partition part_3 values ('mmm', 'nnn', 'ooo', 'qqq') tablespace TS_SHARP_3,
+  partition part_default values (default) tablespace TS_SHARP_4
+);
+--5
+
+--6
+alter table t_range1 enable row movement;
+update t_range1 set num = 50 where num = 8;
+select * from t_range1 partition (nums_less_10);
+select * from t_range1 partition (nums_max);
+
+--7
+alter table t_list merge partiton part_1, part_2
+  into partition part_12;
+select * from t_list partition(part_12);
+
+
