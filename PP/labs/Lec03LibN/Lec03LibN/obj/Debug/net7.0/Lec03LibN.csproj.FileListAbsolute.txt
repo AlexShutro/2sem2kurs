@@ -1,0 +1,11 @@
+D:\2 сем\ПП\Лабы\Lec03LibN\Lec03LibN\obj\Debug\net7.0\Lec03LibN.GeneratedMSBuildEditorConfig.editorconfig
+D:\2 сем\ПП\Лабы\Lec03LibN\Lec03LibN\obj\Debug\net7.0\Lec03LibN.AssemblyInfoInputs.cache
+D:\2 сем\ПП\Лабы\Lec03LibN\Lec03LibN\obj\Debug\net7.0\Lec03LibN.AssemblyInfo.cs
+D:\2 сем\ПП\Лабы\Lec03LibN\Lec03LibN\obj\Debug\net7.0\Lec03LibN.csproj.CoreCompileInputs.cache
+D:\2 сем\ПП\Лабы\Lec03LibN\Lec03LibN\bin\Debug\net7.0\Lec03LibN.deps.json
+D:\2 сем\ПП\Лабы\Lec03LibN\Lec03LibN\bin\Debug\net7.0\Lec03LibN.dll
+D:\2 сем\ПП\Лабы\Lec03LibN\Lec03LibN\bin\Debug\net7.0\Lec03LibN.pdb
+D:\2 сем\ПП\Лабы\Lec03LibN\Lec03LibN\obj\Debug\net7.0\Lec03LibN.dll
+D:\2 сем\ПП\Лабы\Lec03LibN\Lec03LibN\obj\Debug\net7.0\refint\Lec03LibN.dll
+D:\2 сем\ПП\Лабы\Lec03LibN\Lec03LibN\obj\Debug\net7.0\Lec03LibN.pdb
+D:\2 сем\ПП\Лабы\Lec03LibN\Lec03LibN\obj\Debug\net7.0\ref\Lec03LibN.dll
