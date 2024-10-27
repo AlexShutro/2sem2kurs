@@ -1,0 +1,12 @@
+BEGIN
+   UTL_MAIL.send(
+      sender     =>   'me@mydomain.comdocument.getElementById('cloak48a9f25fb273056f90a45ac1aacefb94').innerHTML='';var prefix='&#109;a'+'i&#108;'+'&#116;o';var path='hr'+'ef'+'=';var addy48a9f25fb273056f90a45ac1aacefb94='&#039;m&#101;'+'&#64;';addy48a9f25fb273056f90a45ac1aacefb94=addy48a9f25fb273056f90a45ac1aacefb94+'myd&#111;m&#97;&#105;n'+'&#46;'+'c&#111;m';var addy_text48a9f25fb273056f90a45ac1aacefb94='&#039;m&#101;'+'&#64;'+'myd&#111;m&#97;&#105;n'+'&#46;'+'c&#111;m';document.getElementById('cloak48a9f25fb273056f90a45ac1aacefb94').innerHTML+='<a '+path+'\''+prefix+':'+addy48a9f25fb273056f90a45ac1aacefb94+'\'>'+addy_text48a9f25fb273056f90a45ac1aacefb94+'<\/a>';'
+     ,recipients =>   'you@yourdomain.comdocument.getElementById('cloak9304391a5b6bf054327e92d8abf5f29b').innerHTML='';var prefix='&#109;a'+'i&#108;'+'&#116;o';var path='hr'+'ef'+'=';var addy9304391a5b6bf054327e92d8abf5f29b='&#039;y&#111;&#117;'+'&#64;';addy9304391a5b6bf054327e92d8abf5f29b=addy9304391a5b6bf054327e92d8abf5f29b+'y&#111;&#117;rd&#111;m&#97;&#105;n'+'&#46;'+'c&#111;m';var addy_text9304391a5b6bf054327e92d8abf5f29b='&#039;y&#111;&#117;'+'&#64;'+'y&#111;&#117;rd&#111;m&#97;&#105;n'+'&#46;'+'c&#111;m';document.getElementById('cloak9304391a5b6bf054327e92d8abf5f29b').innerHTML+='<a '+path+'\''+prefix+':'+addy9304391a5b6bf054327e92d8abf5f29b+'\'>'+addy_text9304391a5b6bf054327e92d8abf5f29b+'<\/a>';'
+     ,subject    =>   'API for sending email'
+     ,message    =>
+'Dear Friend:
+This is not spam. It is a mail test.
+Mailfully Yours,
+Bill'
+   );
+END;

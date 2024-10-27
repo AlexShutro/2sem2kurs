@@ -1,0 +1,44 @@
+create or replace function import_xml(way varchar2) return clob
+is
+    dest int := 1;
+    src int := 1;
+    cs number := 0;
+    lang int := 0;
+    warn int := 0;
+    bf bfile;
+    c clob;
+begin
+    dbms_lob.createtemporary(c, true);
+    
+    bf := bfilename('EXPORT_XML', way);
+    dbms_lob.fileopen(bf, dbms_lob.file_readonly);
+    dbms_lob.loadclobfromfile(
+        dest_lob => c,
+        src_bfile => bf,
+        amount => dbms_lob.lobmaxsize,
+        dest_offset => dest,
+        src_offset => src,
+        bfile_csid => cs,
+        lang_context => lang,
+        warning => warn
+    );
+    dbms_lob.fileclose(bf);
+    
+    return c;
+end;
+
+create sequence orders_ids start with 1000 increment by 1;
+
+delete orders;
+select * from orders;
+insert into orders(order_id,customer_id,order_date,total_amount)
+select orders_ids.nextval,customer_id,order_date,total_amount
+from xmltable(
+        '/ORDERS/ORDER'
+        passing xmltype(import_xml('export.xml'))
+        columns
+         order_id  number path 'ORDER_ID',
+         customer_id  number path 'CUSTOMER_ID',
+        order_date   date path 'ORDER_DATE',
+        total_amount number path 'TOTAL_AMOUNT'
+    );

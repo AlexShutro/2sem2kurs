@@ -1,0 +1,54 @@
+drop INDEX idx_Product_name
+alter session set container = HockeyShop
+
+begin
+    ctx_ddl.drop_preference('my_wordlist');
+    ctx_ddl.drop_preference('my_lexer');
+end;
+
+begin
+    ctx_ddl.create_preference ('my_wordlist', 'BASIC_WORDLIST');
+    ctx_ddl.create_preference ('my_lexer', 'AUTO_LEXER');
+    ctx_ddl.set_attribute ('my_lexer', 'INDEX_STEMS', 'YES');
+end;
+
+
+CREATE INDEX idx_Product_name ON Products(ProductName)
+INDEXTYPE IS CTXSYS.CONTEXT parameters ('LEXER my_lexer WORDLIST my_wordlist');
+
+
+CREATE OR REPLACE PROCEDURE SearchProducts(p_SearchString VARCHAR2) AS
+  v_SearchString VARCHAR2(100);
+  v_ResultCount NUMBER;
+BEGIN
+  IF LENGTH(p_SearchString) > 100 THEN
+    DBMS_OUTPUT.PUT_LINE('Error: Input string is too long.');
+    RETURN;
+  END IF;
+
+  v_SearchString := '%' || p_SearchString || '%';
+
+  SELECT COUNT(*) INTO v_ResultCount FROM Products WHERE CONTAINS(ProductName, v_SearchString) > 0;
+
+  IF v_ResultCount > 0 THEN
+    FOR Product_rec IN (
+      SELECT * FROM Products WHERE CONTAINS(ProductName, v_SearchString) > 0
+    ) LOOP
+      DBMS_OUTPUT.PUT_LINE('ProductID: ' || Product_rec.ProductID || ', ProductName: ' || Product_rec.ProductName);
+    END LOOP;
+  ELSE
+    DBMS_OUTPUT.PUT_LINE('No Products found matching the search criteria.');
+  END IF;
+END SearchProducts;
+
+
+BEGIN
+  SearchProducts('or');
+END;
+
+
+
+
+
+
+

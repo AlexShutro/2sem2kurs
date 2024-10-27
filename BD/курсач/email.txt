@@ -1,0 +1,44 @@
+DECLARE
+  -- Переменные для подключения к SMTP-серверу
+  l_mailhost VARCHAR2(255) := 'your_smtp_host';
+  l_mailport NUMBER := your_smtp_port;
+  l_sender VARCHAR2(255) := 'sender@example.com';
+  l_recipient VARCHAR2(255) := 'recipient@example.com';
+  l_subject VARCHAR2(255) := 'Тестовое письмо';
+  l_message VARCHAR2(4000) := 'Привет! Это тестовое письмо из Oracle SQL Developer.';
+  l_smtp_conn UTL_SMTP.CONNECTION;
+BEGIN
+  -- Установка соединения с SMTP-сервером
+  l_smtp_conn := UTL_SMTP.OPEN_CONNECTION(l_mailhost, l_mailport);
+  
+  -- Вход в систему SMTP
+  UTL_SMTP.HELO(l_smtp_conn, l_mailhost);
+  
+  -- Отправка отправителя и получателя
+  UTL_SMTP.MAIL(l_smtp_conn, l_sender);
+  UTL_SMTP.RCPT(l_smtp_conn, l_recipient);
+  
+  -- Заголовки сообщения
+  UTL_SMTP.OPEN_DATA(l_smtp_conn);
+  UTL_SMTP.WRITE_DATA(l_smtp_conn, 'Date: ' || TO_CHAR(SYSDATE, 'DD-MON-YYYY HH24:MI:SS'));
+  UTL_SMTP.WRITE_DATA(l_smtp_conn, 'From: ' || l_sender);
+  UTL_SMTP.WRITE_DATA(l_smtp_conn, 'Subject: ' || l_subject);
+  UTL_SMTP.WRITE_DATA(l_smtp_conn, 'To: ' || l_recipient);
+  
+  -- Текст сообщения
+  UTL_SMTP.WRITE_DATA(l_smtp_conn, 'Content-Type: text/plain; charset=us-ascii');
+  UTL_SMTP.WRITE_DATA(l_smtp_conn, 'Content-Length: ' || LENGTH(l_message));
+  UTL_SMTP.WRITE_DATA(l_smtp_conn, '');
+  UTL_SMTP.WRITE_DATA(l_smtp_conn, l_message);
+  
+  -- Завершение сообщения и отправка
+  UTL_SMTP.CLOSE_DATA(l_smtp_conn);
+  
+  -- Закрытие соединения с SMTP-сервером
+  UTL_SMTP.QUIT(l_smtp_conn);
+  
+  DBMS_OUTPUT.PUT_LINE('Письмо отправлено успешно.');
+EXCEPTION
+  WHEN OTHERS THEN
+    DBMS_OUTPUT.PUT_LINE('Ошибка при отправке письма: ' || SQLERRM);
+END;

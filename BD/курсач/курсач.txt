@@ -1,0 +1,651 @@
+create table product_categories (
+    category_id   number primary key,
+    category_name varchar(200) not null);
+create table products(
+    product_id   number primary key,
+    product_name varchar(200) not null,
+    category_id  number,
+    price        decimal(10,2) not null,
+    description  varchar(255),
+    image_url    varchar(200),
+    foreign key (category_id) references product_categories(category_id));
+alter table products
+add quantity number default 0;
+alter table products modify price number(10,2);
+create table customers (
+  customer_id  number primary key,
+  first_name   varchar2(50),
+  last_name    varchar2(50),
+  email        varchar2(100),
+  phone_number varchar2(20),
+  address      varchar2(200));
+alter table customers
+add constraint uk_first_name unique (first_name);
+create table orders (
+  order_id     number primary key,
+  customer_id  number,
+  order_date   date,
+  total_amount number,
+  foreign key (customer_id) references customers(customer_id));
+alter table orders
+add status_id number;
+alter table orders
+add constraint fk_order_statuses foreign key (status_id) references order_statuses(status_id);
+create table composition_of_orders(
+  order_id     number,
+  product_id   number,
+  quantity     number,
+  foreign key (order_id) references orders(order_id),
+  foreign key (product_id) references products(product_id));
+alter table composition_of_orders
+add composition_id number primary key;
+create table order_statuses (
+  status_id   number primary key,
+  status_name varchar2(50) not null);
+create table user_cart(
+  cart_id     number primary key,
+  customer_id number,
+  foreign key (customer_id) references customers(customer_id));
+
+create table cart_items(
+  cart_item_id number primary key,
+  cart_id      number,
+  product_id   number,
+  quantity     number,
+  foreign key (cart_id) references user_cart(cart_id),
+  foreign key (product_id) references products(product_id));
+
+create role USER_DEFAULT;                   
+grant create session to USER_DEFAULT;
+grant alter session to USER_DEFAULT;
+grant execute on make_order to USER_DEFAULT;
+grant execute on undo_order to USER_DEFAULT;
+grant execute on undo_last_order to USER_DEFAULT;
+grant execute on add_product_to_cart to USER_DEFAULT;
+grant execute on remove_from_cart to USER_DEFAULT;
+grant execute on get_cart to USER_DEFAULT;
+grant execute on view_sales_by_period to USER_DEFAULT;
+grant execute on display_popular_products to USER_DEFAULT;
+grant execute on display_total_amount_of_products to USER_DEFAULT;
+grant execute on display_product_categories to USER_DEFAULT;
+grant execute on GetCustomerOrders to USER_DEFAULT;
+create user CP_SAS_USER_1 identified by 123;
+create user CP_SAS_USER_2 identified by 123;
+grant USER_DEFAULT to CP_SAS_USER_1;
+grant USER_DEFAULT to CP_SAS_USER_2;
+create role ADMIN_DEFAULT;
+grant create session to ADMIN_DEFAULT;
+grant alter session to ADMIN_DEFAULT;
+grant execute on make_order to ADMIN_DEFAULT;
+grant execute on undo_order to ADMIN_DEFAULT;
+grant execute on undo_last_order to ADMIN_DEFAULT;
+grant execute on add_product_to_cart to ADMIN_DEFAULT;
+grant execute on remove_from_cart to ADMIN_DEFAULT;
+grant execute on add_category to ADMIN_DEFAULT;
+grant execute on delete_category to ADMIN_DEFAULT;
+grant execute on add_product to ADMIN_DEFAULT;
+grant execute on delete_product to ADMIN_DEFAULT;
+grant execute on update_product to ADMIN_DEFAULT;
+grant execute on add_quantity_product to ADMIN_DEFAULT;
+grant execute on remove_quantity_product to ADMIN_DEFAULT;
+grant execute on view_sales_by_period to ADMIN_DEFAULT;
+grant execute on display_total_amount_of_products to ADMIN_DEFAULT;
+grant execute on display_popular_products to ADMIN_DEFAULT;
+grant execute on display_product_categories to ADMIN_DEFAULT;
+grant execute on display_order_information to ADMIN_DEFAULT;
+grant execute on display_customer_information to ADMIN_DEFAULT;
+grant execute on GetCustomerOrders to ADMIN_DEFAULT;
+grant execute on change_order_status to ADMIN_DEFAULT;
+create user CP_SAS_ADMIN_1 identified by 123;
+grant ADMIN_DEFAULT to CP_YNS_ADMIN_1;
+create role GUEST_DEFAULT;
+grant create session to GUEST_DEFAULT;
+grant execute on create_new_user to GUEST_DEFAULT;
+create user CP_SAS_GUEST identified by 123;
+grant GUEST_DEFAULT to CP_SAS_GUEST;
+
+
+create or replace procedure add_category (p_category_name invarchar2) as
+    p_category_id number;
+begin
+    select max(category_id)
+    into p_category_id
+    from product_categories;
+    insert into product_categories (category_id, category_name)
+    values (p_category_id + 1, p_category_name);
+    commit; 
+exception
+    when no_data_found then 
+        insert into product_categories (category_id, category_name)
+        values (1, p_category_name);  
+        commit; 
+    when others then
+        dbms_output.put_line('Ошибка при выполнении процедуры');
+        rollback;
+        raise;
+end;
+create or replace procedure delete_category (
+    p_category_name in varchar2
+) as
+begin
+    delete from product_categories
+    where category_name = p_category_name;
+    commit;
+exception
+    when no_data_found then 
+        dbms_output.put_line('Категория ' || p_category_name || ' не найдена.'); 
+        rollback;
+    when others then
+        dbms_output.put_line('Ошибка при выполнении процедуры');
+        rollback;
+        raise;
+end;
+Листинг 3 – Скрипты создания процедур управления категориями
+create or replace procedure add_order (
+    p_customer_id  in number,
+    p_total_amount in number,
+    p_status_id    in number
+) as
+    p_order_id number;
+begin
+    select max(order_id)
+    into p_order_id
+    from orders;
+    insert into orders
+    values (p_order_id + 1, p_customer_id, sysdate, p_total_amount, p_status_id);
+    commit;
+exception
+    when no_data_found then 
+        insert into orders
+        values (1, p_customer_id, sysdate, p_total_amount, p_status_id);
+        commit; 
+    when others then
+        dbms_output.put_line('Ошибка при добавлении заказа.');
+        rollback;
+        raise;
+end;
+create or replace procedure delete_order (
+    p_order_id in number
+) as
+begin
+    delete from orders
+    where order_id = p_order_id;
+    commit;
+exception
+    when others then 
+        dbms_output.put_line('Заказ ' || p_order_id || ' не найден.'); 
+        rollback;
+        raise;
+end;
+create or replace procedure add_order_composition (
+    p_order_id      in number,
+    p_product_id    in number,
+    p_quantity        in number
+) as
+    p_composition_id number;
+begin
+    select max(composition_id)
+    into p_composition_id
+    from composition_of_orders;
+    insert into composition_of_orders
+    values (p_order_id, p_product_id, p_quantity, p_composition_id + 1);
+    commit;
+    update products
+    set quantity = quantity - p_quantity
+    where product_id = p_product_id;
+    commit;
+exception
+    when no_data_found then 
+        insert into composition_of_orders
+        values (p_order_id, p_product_id, p_quantity, 1);
+        commit;    
+    when others then
+        dbms_output.put_line('Ошибка при добавлении композиции.');
+        rollback;
+        raise;
+end;
+create or replace procedure delete_order_composition (
+    p_order_id in number
+) as
+    p_quantity number;
+    p_product_id number;
+begin
+    select quantity
+    into p_quantity
+    from composition_of_orders
+    where order_id = p_order_id;
+    select product_id
+    into p_product_id
+    from composition_of_orders
+    where order_id = p_order_id;
+    update products
+    set quantity = quantity + p_quantity
+    where product_id = p_product_id;
+    commit;
+    delete from composition_of_orders
+    where order_id = p_order_id;
+    commit;
+exception
+    when others then 
+        dbms_output.put_line('Композиция ' || p_order_id || ' не найден.'); 
+        rollback;
+        raise;
+end;
+
+
+create or replace procedure add_product (
+    p_product_name in varchar,
+    p_category_id  in number,
+    p_price        in number,
+    p_description  in varchar,
+    p_image_url    in varchar,
+    p_quantity     in number
+) as
+    p_product_id number;
+begin
+    select max(product_id)
+    into p_product_id
+    from products;
+    insert into products 
+    values (p_product_id + 1, p_product_name, p_category_id, p_price, p_description, p_image_url, p_quantity);
+    commit; 
+exception
+    when no_data_found then 
+        insert into products 
+        values (1, p_product_name, p_category_id, p_price, p_description, p_image_url, p_quantity);
+        commit; 
+    when others then
+        dbms_output.put_line('Неверные данные'); 
+        rollback;
+        raise;
+end;
+create or replace procedure delete_product (
+    p_product_name in varchar2
+) as
+begin
+    delete from products
+    where product_name = p_product_name;
+    commit;
+exception
+    when others then 
+        dbms_output.put_line('Товар ' || p_product_name || ' не найден.'); 
+        rollback;
+        raise;
+end;
+create or replace procedure update_product (
+    p_product_name   in varchar,
+    p_price          in number,
+    p_description    in varchar,
+    p_image_url      in varchar,
+    p_quantity       in number
+) as
+begin
+    update products
+    set price = p_price,
+        description = p_description,
+        image_url = p_image_url,
+        quantity = p_quantity
+    where product_name = p_product_name;
+    commit; 
+exception
+    when others then 
+        dbms_output.put_line('Продукт ' || p_product_name || ' не найден.');
+        rollback;
+        raise;
+end;
+create or replace procedure add_quantity_product (
+    p_product_name   in varchar,
+    p_quantity       in number
+) as
+begin
+    update products
+    set quantity = quantity + p_quantity
+    where product_name = p_product_name;
+    commit; 
+exception
+    when others then 
+        dbms_output.put_line('Продукт ' || p_product_name || ' не найден.');
+        rollback;
+        raise;
+end;
+create or replace procedure remove_quantity_product (
+    p_product_name   in varchar,
+    p_quantity       in number
+) as
+    current_quantity number;
+begin
+    select quantity 
+    into current_quantity
+    from products
+    where product_name = p_product_name;
+    if (p_quantity > current_quantity) then
+        dbms_output.put_line('Количество не может превышать имеющееся');
+        return;
+    end if;  
+    update products
+    set quantity = quantity - p_quantity
+    where product_name = p_product_name;
+    commit; 
+exception
+    when others then 
+        dbms_output.put_line('Продукт ' || p_product_name || ' не найден.');
+        rollback;
+        raise;
+end;
+
+create materialized view sales_by_period_view
+refresh complete on commit
+as
+    select to_char(o.order_date, 'YYYY-MM') as month, p.product_name, sum(co.quantity) as total_quantity
+    from orders o
+    join composition_of_orders co on o.order_id = co.order_id
+    join products p on co.product_id = p.product_id
+    group by to_char(o.order_date, 'YYYY-MM'), p.product_name
+    order by month desc;    
+create materialized view popular_products
+refresh complete on commit
+as
+    select p.product_name, sum(co.quantity) as total_quantity
+    from composition_of_orders co
+    join products p on co.product_id = p.product_id
+    group by p.product_name
+    order by total_quantity desc;
+create materialized view total_amount_of_products
+refresh complete on commit
+as
+    select product_name, quantity
+    from products;
+
+create or replace procedure add_product_to_cart (
+    p_product_name      in varchar,
+    p_quantity          in number
+) as 
+    p_current_quantity  number;
+    p_customer_name     varchar(200);
+    p_cart_item_id      number;
+    p_cart_id           number;
+    p_product_id        number;
+    p_customer_id       number;
+    p_count             number;
+    p_quantity_in_cart  number;
+begin
+    select quantity 
+    into p_current_quantity
+    from products
+    where product_name = p_product_name; 
+    if (p_quantity > p_current_quantity) then
+        dbms_output.put_line('Количество не может превышать имеющееся');
+        return;
+    end if;
+    select user into p_customer_name from dual;
+    select customer_id 
+    into p_customer_id
+    from customers 
+    where first_name = p_customer_name;
+    select max(cart_item_id)
+    into p_cart_item_id
+    from cart_items; 
+    select cart_id
+    into p_cart_id
+    from user_cart 
+    where customer_id = p_customer_id;
+    select product_id
+    into p_product_id
+    from products
+    where product_name = p_product_name;
+    select count(*)
+    into p_count
+    from cart_items
+    where product_id = p_product_id and cart_id = p_cart_id;
+    if (p_count > 0) then
+        select quantity
+        into p_quantity_in_cart
+        from cart_items
+        where product_id = p_product_id and cart_id = p_cart_id;
+        update cart_items
+        set quantity = quantity + p_quantity
+        where product_id = p_product_id and cart_id = p_cart_id;       
+        DBMS_SCHEDULER.SET_ATTRIBUTE(
+        name        => 'remove_from_cart_' || p_product_id || '_' || p_cart_id,
+        attribute   => 'job_action',
+        value       => 'BEGIN remove_from_cart(''' || p_product_name || ''', ' || (p_quantity_in_cart + p_quantity) || '); END;'
+        );      
+    else
+        insert into cart_items values (p_cart_item_id + 1, p_cart_id, p_product_id, p_quantity);        
+        DBMS_SCHEDULER.CREATE_JOB(
+        job_name        => 'remove_from_cart_' || p_product_id || '_' || p_cart_id,
+        job_type        => 'PLSQL_BLOCK',
+        job_action      => 'BEGIN remove_from_cart(''' || p_product_name || ''', ' || p_quantity || '); END;',
+        start_date      => SYSTIMESTAMP + INTERVAL '1' HOUR,
+        repeat_interval => '', 
+        enabled         => TRUE,
+        auto_drop       => TRUE
+        );
+    end if;  
+    update products
+    set quantity = quantity - p_quantity
+    where product_id = p_product_id;
+    commit;  
+exception
+    when others then 
+        dbms_output.put_line('Ошибка при оформлении заказа.'); 
+        rollback;
+        raise;
+end;
+create or replace procedure remove_from_cart (
+    p_product_name  in varchar,
+    p_quantity     in number
+) as 
+    p_quantity_in_cart  number;
+    p_product_id        number;
+    p_cart_id           number;
+    p_customer_name     varchar(200);
+begin
+    select user into p_customer_name from dual;  
+    select customer_id
+    into p_cart_id
+    from customers
+    where first_name = p_customer_name;
+    select product_id
+    into p_product_id
+    from products
+    where product_name = p_product_name; 
+    select quantity
+    into p_quantity_in_cart
+    from cart_items
+    where cart_id = p_cart_id and product_id = p_product_id;
+    if (p_quantity > p_quantity_in_cart) then
+        dbms_output.put_line('Количество не может превышать имеющееся');
+        return;
+    end if; 
+    if (p_quantity = p_quantity_in_cart) then
+        delete from cart_items 
+        where cart_id = p_cart_id and product_id = p_product_id;
+        commit;
+        
+        update products
+        set quantity = quantity + p_quantity
+        where product_id = p_product_id;
+        commit;      
+         DBMS_SCHEDULER.DROP_JOB(
+            job_name => 'remove_from_cart_' || p_product_id || '_' || p_cart_id
+        );       
+        return;
+    end if;   
+    update cart_items 
+    set quantity = quantity - p_quantity
+    where cart_id = p_cart_id and product_id = p_product_id;
+    commit; 
+    update products
+    set quantity = quantity + p_quantity
+    where product_id = p_product_id;
+    commit; 
+    DBMS_SCHEDULER.SET_ATTRIBUTE(
+        name        => 'remove_from_cart_' || p_product_id || '_' || p_cart_id,
+        attribute   => 'job_action',
+        value       => 'BEGIN remove_from_cart(''' || p_product_name || ''', ' || (p_quantity_in_cart - p_quantity) || '); END;'
+    ); 
+    exception
+        when no_data_found then
+            rollback;
+        when others then
+            rollback;
+            raise;
+end;
+create or replace procedure get_cart
+as
+    p_customer_id number;
+    p_customer_name varchar(200);
+begin
+    select user into p_customer_name from dual;
+    select customer_id
+    into p_customer_id
+    from customers
+    where first_name = p_customer_name;
+    for item in 
+    (
+        select p.product_name, ci.quantity, p.price, (ci.quantity * p.price) as total_price
+        from cart_items ci
+        inner join products p on ci.product_id = p.product_id
+        where ci.cart_id = (select cart_id from user_cart where customer_id = p_customer_id)
+    ) loop
+    dbms_output.put_line('Product Name: ' || item.product_name);
+    dbms_output.put_line('Quantity: ' || item.quantity);
+    dbms_output.put_line('Price: ' || item.price);
+    dbms_output.put_line('Total Price: ' || item.total_price);
+    dbms_output.put_line('-----------------------');
+  end loop;
+  exception
+    when others then
+        dbms_output.put_line('Ошибка при выполнении процедуры');
+        rollback;
+        raise;
+end;
+
+create or replace procedure undo_last_order
+as
+    p_customer_id   varchar(200);
+    p_order_id      number;
+    p_customer_name varchar(200);
+begin
+        select user 
+        into p_customer_name 
+        from dual;  
+        select customer_id
+        into p_customer_id
+        from customers
+        where first_name = p_customer_name;    
+        select max(order_id)
+        into p_order_id
+        from orders
+        where customer_id = p_customer_id;      
+        delete_order_composition(p_order_id);
+        delete_order(p_order_id);      
+        exception
+        when others then
+            rollback;
+            raise;
+end;
+create public synonym undo_last_order for SYSTEM.undo_last_order;
+create public synonym change_order_status for SYSTEM.change_order_status;
+-- изменение статуса заказа
+CREATE OR REPLACE PROCEDURE change_order_status(
+    p_order_id IN orders.order_id%TYPE,
+    p_status_name IN order_statuses.status_name%TYPE
+)
+IS
+    v_status_id order_statuses.status_id%TYPE;
+BEGIN
+    SELECT status_id INTO v_status_id
+    FROM order_statuses
+    WHERE status_name = p_status_name;  
+    IF v_status_id IS NULL THEN
+        DBMS_OUTPUT.PUT_LINE('Указанный статус не найден.');
+        RETURN;
+    END IF;
+    IF p_order_id IS NULL THEN
+        DBMS_OUTPUT.PUT_LINE('Указанный заказ не найден.');
+        RETURN;
+    END IF;  
+    UPDATE orders
+    SET status_id = v_status_id
+    WHERE order_id = p_order_id;   
+    COMMIT;   
+    DBMS_OUTPUT.PUT_LINE('Статус заказа успешно изменен.');
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE('указанный статус не найден.');
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Произошла ошибка. Изменение статуса заказа не выполнено.');
+END;
+create public synonym GetCustomerOrders for SYSTEM.GetCustomerOrders;
+CREATE OR REPLACE PROCEDURE GetCustomerOrders
+AS
+    v_order_id      NUMBER;
+    v_order_date    DATE;
+    v_total_amount  NUMBER;
+    v_status_name   VARCHAR2(50);
+    v_product_name  VARCHAR2(200);
+    v_product_qty   NUMBER;
+    p_customer_id   number;
+    p_customer_name varchar2(200);
+BEGIN
+ select user 
+        into p_customer_name 
+        from dual;
+    select customer_id
+        into p_customer_id
+        from customers
+        where first_name = p_customer_name;
+    FOR order_rec IN ( 
+        SELECT o.order_id, o.order_date, o.total_amount, os.status_name, p.product_name, co.quantity
+        FROM orders o
+        INNER JOIN order_statuses os ON o.status_id = os.status_id
+        INNER JOIN composition_of_orders co ON o.order_id = co.order_id
+        INNER JOIN products p ON co.product_id = p.product_id
+        WHERE o.customer_id = p_customer_id
+    ) LOOP
+        v_order_id := order_rec.order_id;
+        v_order_date := order_rec.order_date;
+        v_total_amount := order_rec.total_amount;
+        v_status_name := order_rec.status_name;
+        v_product_name := order_rec.product_name;
+        v_product_qty := order_rec.quantity;
+              DBMS_OUTPUT.PUT_LINE('Order ID: ' || v_order_id || ', Order Date: ' || v_order_date || ', Total Amount: ' || v_total_amount || ', Status: ' || v_status_name || ', Product: ' || v_product_name || ', Quantity: ' || v_product_qty);
+    END LOOP;
+END;
+
+create or replace procedure create_new_user (
+    p_username in varchar,
+    p_usersurname in varchar,
+    p_email in varchar,
+    p_phone_number in varchar,
+    p_address in varchar,
+    p_password in number
+) as
+    p_id number;
+begin
+    IF p_email IS NOT NULL THEN
+        IF REGEXP_LIKE(p_email, '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$') = FALSE THEN
+           dbms_output.put_line('Неправильный формат электронной почты');
+           return;END IF;
+    END IF; 
+    IF REGEXP_LIKE(p_phone_number, '^\+[0-9]{1,3}[0-9]{9}$') = FALSE THEN
+        dbms_output.put_line('Неправильный формат телефона');return;
+        end if;
+    select NVL(max(customer_id),0)
+    into p_id
+    from customers;
+    insert into customers values (p_id + 1, p_username, p_usersurname, p_email, p_phone_number, p_address); 
+    execute immediate 'create user ' || p_username || ' identified by ' || p_password;
+    execute immediate 'grant USER_DEFAULT to ' || p_username;
+    commit;
+    exception
+        when others then
+        dbms_output.put_line('Ошибка при выполнении процедуры');
+        rollback;
+        raise;
+end;
+
+
+

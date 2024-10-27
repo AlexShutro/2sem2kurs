@@ -1,0 +1,12 @@
+create directory export_xml as 'C:/export';
+
+declare
+    cb clob;
+begin
+    select xmlelement("ORDERS",
+        xmlagg(xmlelement("ORDER",
+            xmlforest( order_id,customer_id,order_date,total_amount)))).getClobVal() into cb from orders;
+    
+    dbms_xslprocessor.clob2file(cl => cb, flocation => 'EXPORT_XML', fname => 'export.xml');
+end;
+delete orders;

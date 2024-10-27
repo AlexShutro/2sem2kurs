@@ -1,0 +1,89 @@
+-- categories
+insert into product_categories values (1, 'Pants');
+insert into product_categories values (2, 'Shirt');
+insert into product_categories values (3, 'T-shirt');
+insert into product_categories values (4, 'Skirt');
+insert into product_categories values (5, 'Jacket');
+insert into product_categories values (6, 'Cardigan');
+commit;
+
+-- products
+insert into products values (1, 'Jeans', 1, 60, 'Classic blue jeans', 'https://example.com/images/jeans.jpg', 10);
+insert into products values (2, 'Shirt Polo', 2, 30, 'Men's White Polo Shirt', 'https://example.com/images/polo-shirt.jpg', 20);
+insert into products values (3, 'T-shirt with logo', 3, 20, 'Women's T-shirt in black with a logo', 'https://example.com/images/logo-tshirt.jpg', 15);
+insert into products values (4, 'Mini Skirt', 4, 40, 'Faux Leather Mini Skirt', 'https://example.com/images/mini-skirt.jpg', 5);
+insert into products values (5, 'Down jacket', 5, 100, 'Women's Down Jacket with Hood', 'https://example.com/images/puffer-jacket.jpg', 8);
+insert into products values (6, 'Hooded Sweatshirt', 6, 50, 'Men's grey sweatshirt with a hood', 'https://example.com/images/hoodie.jpg', 12);
+insert into products values (7, 'Sports pants', 1, 50, 'Sweatpants in black', 'https://example.com/images/sports-pants.jpg', 20);
+insert into products values (8, 'Jogger pants', 1, 40, 'Men's joggers with pockets', 'https://example.com/images/jogger-pants.jpg', 15);
+insert into products values (9, 'Long Sleeve Shirt', 2, 35, 'Women's Long Sleeve Shirt', 'https://example.com/images/long-sleeve-shirt.jpg', 10);
+insert into products values (10, 'Short-sleeved shirt', 2, 25, 'Men's Short Sleeve Shirt', 'https://example.com/images/short-sleeve-shirt.jpg', 18);
+insert into products values (11, 'Printed T-shirt', 3, 15, 'Men's Printed T-shirt', 'https://example.com/images/print-tshirt.jpg', 25);
+insert into products values (12, 'Polo Shirt', 3, 20, 'Women's Polo Shirt with Short Sleeves', 'https://example.com/images/polo-tshirt.jpg', 12);
+insert into products values (13, 'Plaid Mini Skirt', 4, 30, 'Black and white plaid mini skirt', 'https://example.com/images/checkered-skirt.jpg', 8);
+insert into products values (14, 'Maxi Skirt', 4, 50, 'Women's Maxi Skirt with Floral Print', 'https://example.com/images/maxi-skirt.jpg', 5);
+insert into products values (15, 'Leather jacket', 5, 150, 'Men's leather jacket with zipper', 'https://example.com/images/leather-jacket.jpg', 10);
+insert into products values (16, 'Windbreaker jacket', 5, 80, 'Women's windbreaker with hood', 'https://example.com/images/windbreaker-jacket.jpg', 15);
+insert into products values (17, 'Jacket with a high collar', 6, 40, 'Women's windbreaker with hood', 'https://example.com/images/turtleneck-sweater.jpg', 20);
+insert into products values (18, 'Jacket with pockets', 6, 30, 'Women's jacket with pockets', 'https://example.com/images/pocket-sweater.jpg', 18);
+commit;
+
+-- buyers
+insert into customers values (1, 'Alex', 'Shutro', 'alex.shutro@gmail.com', '+375298047726', 'Belarus, Kobrin');
+insert into customers values (2, 'Misha', 'Shimchik', 'mishashim@mail.ru', '+37338248565', 'Belarus, Bobruisk');
+insert into customers values (3, 'SYSTEM', 'shutro', 'admin@gmail.com', '+375447777777', 'USA, Boston');
+insert into customers values (4, 'CP_SAS_USER_1', 'shutro', 'user1@gmail.com', '+375446677777', 'Belarus, Minsk');
+insert into customers values (5, 'CP_SAS_USER_2', 'shutro', 'user2@gmail.com', '+375445577777', 'Belarus, Minsk');
+insert into customers values (6, 'CP_SAS_ADMIN_1', 'shutro', 'user2@gmail.com', '+37544555555', 'Belarus, Minsk');
+commit;
+
+-- order statuses
+insert into order_statuses values (1, 'Paid for');
+insert into order_statuses values (2, 'Delivered');
+insert into order_statuses values (3, 'Cancelled');
+insert into order_statuses values (4, 'In processing');
+commit;
+
+-- orders 
+insert into orders values (1, 1, sysdate, 54.98, 2);
+insert into orders values (2, 2, sysdate, 29.99, 1);
+insert into orders values(6, 2, TO_DATE('2023-11-06', 'YYYY-MM-DD'), 50, 2);
+insert into orders values(7, 1, TO_DATE('2023-11-08', 'YYYY-MM-DD'), 40, 2);
+commit;
+
+-- the composition of the order
+insert into composition_of_orders values (1, 8, 1, 1);
+insert into composition_of_orders values (1, 11, 1, 2);
+insert into composition_of_orders values (2, 13, 1, 3);
+insert into composition_of_orders values (6, 16, 1, 7);
+insert into composition_of_orders values (7, 5, 1, 8);
+commit;
+
+-- baskets
+insert into user_cart values (1, 1);
+insert into user_cart values (2, 2);
+insert into user_cart values (3, 3);
+insert into user_cart values (4, 4);
+insert into user_cart values (5, 5);
+commit;
+
+-- contents of the shopping cart
+insert into cart_items values (1, 1, 1, 1);
+insert into cart_items values (2, 2, 5, 2);
+insert into cart_items values (3, 2, 6, 1);
+commit;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
