@@ -1,0 +1,60 @@
+﻿<Window x:Class="DatabasedProject.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DatabasedProject.Views"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <DataTemplate x:Key="Main">
+            <local:Main DataContext="{Binding }"/>
+        </DataTemplate>
+        <DataTemplate x:Key="CreateUser">
+            <local:CreateUser DataContext="{Binding }"/>
+        </DataTemplate>
+        <DataTemplate x:Key="CreateConsult">
+            <local:CreateConsult DataContext="{Binding }"/>
+        </DataTemplate>
+        <DataTemplate x:Key="CreateSubject">
+            <local:CreateSubject DataContext="{Binding }"/>
+        </DataTemplate>
+        <DataTemplate x:Key="DeleteConsult">
+            <local:DeleteConsult DataContext="{Binding }"/>
+        </DataTemplate>
+        <DataTemplate x:Key="CancelConsult">
+            <local:CancelConsult DataContext="{Binding }"/>
+        </DataTemplate>
+        <DataTemplate x:Key="ConsultList">
+            <local:ConsultList DataContext="{Binding }"/>
+        </DataTemplate>
+    </Window.Resources>
+
+    <ContentControl Content="{Binding }">
+        <ContentControl.Style>
+            <Style TargetType="{x:Type ContentControl}">
+                <Setter Property="ContentTemplate" Value="{StaticResource Main}"/>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding SwitchPage}" Value="1">
+                        <Setter Property="ContentTemplate" Value="{StaticResource CreateUser}"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding SwitchPage}" Value="2">
+                        <Setter Property="ContentTemplate" Value="{StaticResource CreateConsult}"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding SwitchPage}" Value="3">
+                        <Setter Property="ContentTemplate" Value="{StaticResource CreateSubject}"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding SwitchPage}" Value="4">
+                        <Setter Property="ContentTemplate" Value="{StaticResource DeleteConsult}"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding SwitchPage}" Value="5">
+                        <Setter Property="ContentTemplate" Value="{StaticResource CancelConsult}"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding SwitchPage}" Value="6">
+                        <Setter Property="ContentTemplate" Value="{StaticResource ConsultList}"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </ContentControl.Style>
+    </ContentControl>
+</Window>
