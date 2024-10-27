@@ -1,0 +1,14 @@
+D:\2 сем\ПП\Лабы\ЛАБА1\ЛАБА1\bin\Debug\net7.0\ЛАБА1.exe
+D:\2 сем\ПП\Лабы\ЛАБА1\ЛАБА1\bin\Debug\net7.0\ЛАБА1.deps.json
+D:\2 сем\ПП\Лабы\ЛАБА1\ЛАБА1\bin\Debug\net7.0\ЛАБА1.runtimeconfig.json
+D:\2 сем\ПП\Лабы\ЛАБА1\ЛАБА1\bin\Debug\net7.0\ЛАБА1.dll
+D:\2 сем\ПП\Лабы\ЛАБА1\ЛАБА1\bin\Debug\net7.0\ЛАБА1.pdb
+D:\2 сем\ПП\Лабы\ЛАБА1\ЛАБА1\obj\Debug\net7.0\ЛАБА1.GeneratedMSBuildEditorConfig.editorconfig
+D:\2 сем\ПП\Лабы\ЛАБА1\ЛАБА1\obj\Debug\net7.0\ЛАБА1.AssemblyInfoInputs.cache
+D:\2 сем\ПП\Лабы\ЛАБА1\ЛАБА1\obj\Debug\net7.0\ЛАБА1.AssemblyInfo.cs
+D:\2 сем\ПП\Лабы\ЛАБА1\ЛАБА1\obj\Debug\net7.0\ЛАБА1.csproj.CoreCompileInputs.cache
+D:\2 сем\ПП\Лабы\ЛАБА1\ЛАБА1\obj\Debug\net7.0\ЛАБА1.dll
+D:\2 сем\ПП\Лабы\ЛАБА1\ЛАБА1\obj\Debug\net7.0\refint\ЛАБА1.dll
+D:\2 сем\ПП\Лабы\ЛАБА1\ЛАБА1\obj\Debug\net7.0\ЛАБА1.pdb
+D:\2 сем\ПП\Лабы\ЛАБА1\ЛАБА1\obj\Debug\net7.0\ЛАБА1.genruntimeconfig.cache
+D:\2 сем\ПП\Лабы\ЛАБА1\ЛАБА1\obj\Debug\net7.0\ref\ЛАБА1.dll
